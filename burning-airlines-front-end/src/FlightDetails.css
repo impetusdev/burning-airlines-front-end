@@ -1,0 +1,14 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  gap: 10px;
+
+}
+
+.grid-item {
+  border: 1px solid black;
+}
