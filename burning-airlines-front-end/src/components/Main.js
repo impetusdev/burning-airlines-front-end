@@ -13,12 +13,12 @@ export default class Main extends React.Component {
                 <h1>Put your Title here</h1>
                 
                 <Router>
-                    <Link to="/">Search For Flights</Link>
-                    
+                    <Link to="/">Search For Flights</Link> | {}
+                    <Link to="/details/:id">Temporary link to Flight Details</Link>
                     
                     <Route exact path="/" component={ ResultsPage } />
                     <Route exact path="/details/:id" component={ FlightDetails } />
-                    <Route></Route>
+                    <Route>  </Route>
                 </Router>
 
                 Hello this is the Main component

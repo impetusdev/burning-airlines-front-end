@@ -3,11 +3,10 @@ import React from 'react';
 
 //TODO: Put this search form into main page in return function,
 //something to the effect of:
-
-        // <Router>
-        //   <Route path="" component={ FlightSearchForm } />
-        //   <Route exact path="/search/:searchText" component={ ThumbnailGallery } />
-        // </Router>
+// <Router>
+//   <Route path="" component={ FlightSearchForm } />
+//   <Route exact path="/search/:searchText" component={ ThumbnailGallery } />
+// </Router>
 
 class FlightSearchForm extends React.Component{
 

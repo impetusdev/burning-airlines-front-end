@@ -22,15 +22,16 @@ export default class FlightDetails extends React.Component {
             this.getFlightSeats(); //this is if we input another details page index. 
         }
     }
+
     async getFlightSeats() {
         try {
-            // const res = await axios.get( BASE_URL )
+            // const res = await axios.get(  )
             const res = await {
                 date: '03/08/13',
                 id: 1,
                 departureLoc: 'JFK',
                 arrivalLoc: 'LAX',
-                seatsOccupied: ['true', 'false', 'true', 'false', 'true', 'false', 'false', 'true', 'false' ]
+                seatsOccupied: [true, false, true, false, true, false, false, true, false ]
             }
 
             this.setState(res);
@@ -40,14 +41,24 @@ export default class FlightDetails extends React.Component {
         }
     }
     
+    selectSeat(seatId = 0) { //TODO: figure out how to pass the on click props
+        console.log(seatId)
+    }
+    
     render() {
         // use a grid to loop over the values and generate the squares. On the outside have the row and column numbers. 
         return (
             <div className="grid-container">
-                {
-                    this.state.seatsOccupied.map( (seat, i) => {
+                { //TODO: make click event that makes the allocation call to backend. 
+                    this.state.seatsOccupied.map( (seatOccupied, i) => {
                         // console.log(seat);
-                        return <div key={i} className="grid-item">{seat}</div>
+                        return seatOccupied
+                        ?
+                        // <div  className="">
+                        <button key={i} className="button-fail" onClick={this.selectSeat}>Seat #{i}</button>
+                        // </div>
+                        :
+                        <button key={i} className="button-pass" onClick={this.selectSeat}>Seat #{i}</button>
                     })
                 }
             </div>
