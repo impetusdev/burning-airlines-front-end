@@ -3,8 +3,11 @@ import React from "react";
 import '../FlightDetails.css'
 
 
-const RAILS_SECRETS_BASE_URL = 'http://localhost:3000/flights/39';
+const RAILS_SECRETS_BASE_URL = 'http://localhost:3000/flights/41';
+const RAILS_SECRETS_BASE_URL_POST = 'http://localhost:3000/reservations.json';
 
+const rowLength = 8;
+const colLength = 5;
 
 export default class FlightDetails extends React.Component {
 
@@ -39,11 +42,11 @@ export default class FlightDetails extends React.Component {
             // TODO: convert the string in seats occupied to a raw index position. 
             // 'if you put in A5
             seatsOccupied.forEach(seat => {
-                console.log(`Seat: ${seat} has the number: ${seat.match(/\d+/g)}`)
-                console.log(`Seat: ${seat} has the letter: ${seat.match(/^[A-Z]+/)}`)
+                // console.log(`Seat: ${seat} has the number: ${seat.match(/\d+/g)}`)
+                // console.log(`Seat: ${seat} has the letter: ${seat.match(/^[A-Z]+/)}`)
                 let seat_letter = seat.match(/^[A-Z]+/)[0]; // converts the array of letters into one string
                 let seat_number = parseInt(seat.match(/\d+/g).join('')); // converts the array of numbers from match to a single integer
-                let positionI = (seat_letter.charCodeAt(0) - 65) * 8 + seat_number; // converts the letter to the index equivalent and adds the seat No.
+                let positionI = (seat_letter.charCodeAt(0) - 65) * rowLength + seat_number; // converts the letter to the index equivalent and adds the seat No.
                 
                 seats[positionI] = true;
             });
@@ -51,27 +54,42 @@ export default class FlightDetails extends React.Component {
 
             // console.log('Occupied seats', occupiedSeats);
             
-            // const res = await {
-            //     date: '03/08/13',
-            //     id: 1,
-            //     departureLoc: 'JFK',
-            //     arrivalLoc: 'LAX',
-            //     seatsOccupied: [true, false, true, false, true, false, false, true, false ]
-            // };
-
             this.setState({date: date, id: id , origin: origin, destination: destination , seatsOccupied: seats}); //TODO: look into ways of cleaning this up
         } catch (err) {
             console.log('AJAX ERROR:', err);
         }
     }
     
-    selectSeat(i) { //TODO: figure out how to pass the on click props
+    selectSeat(i) {
         console.log(i);
-        let newSeats = this.state.seatsOccupied.slice();
+        // convert i to Seat ID. 
+        let newSeats = this.state.seatsOccupied.slice({});
+
         newSeats[i] = !newSeats[i]
 
-        this.setState({ seatsOccupied: newSeats }); // TODO: figure out how to only modify the single value. 
-        // TODO: Do the post request to the page. 
+        this.setState({ seatsOccupied: newSeats });
+        
+        
+        // Perform the post request to the page. 
+        // debugger;
+        const seat = `${String.fromCharCode(Math.floor(i / rowLength) + 65)}, ${(i % rowLength + 1).toString()}`;
+        console.log('seat is:', seat);
+
+        // makes a new reservation with the current users details.
+        this.postSeatReserved(seat);
+        
+    }
+
+    async postSeatReserved(seat) {
+        try {
+            const res = await axios.post(RAILS_SECRETS_BASE_URL_POST, {seat: 'E5'})
+            console.log('reservation create response', res.data);
+
+            //TODO: Figure out if I need to use the set state again. But I don't think I do. 
+
+        } catch(err) {
+            console.log('Posting Seat Reserved Error:', err);
+        }
     }
     
     render() {
