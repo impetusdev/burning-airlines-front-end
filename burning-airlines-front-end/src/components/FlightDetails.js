@@ -9,10 +9,10 @@ const RAILS_SECRETS_BASE_URL = 'http://localhost:3000/flights/39';
 export default class FlightDetails extends React.Component {
 
     state = {
-        date: '',
         id: null,
-        departureLoc: '',
-        arrivalLoc: '',
+        date: '',
+        origin: '',
+        destination: '',
         seatsOccupied: []
     };
     
@@ -31,13 +31,26 @@ export default class FlightDetails extends React.Component {
         try {
             const res = await axios.get( RAILS_SECRETS_BASE_URL )
             console.log('flight response:', res.data);
-        
 
-            const occupiedSeats = res.data.reservations.map( reservation => {
+            const seats = Array(40).fill(false); // occupied? => false; 8 by 5
+
+            const {date, id , origin, destination } = res.data;
+            const seatsOccupied = res.data.reservations.map( reservation =>  reservation.seat)
+            // TODO: convert the string in seats occupied to a raw index position. 
+            // 'if you put in A5
+            seatsOccupied.forEach(seat => {
+                console.log(`Seat: ${seat} has the number: ${seat.match(/\d+/g)}`)
+                console.log(`Seat: ${seat} has the letter: ${seat.match(/^[A-Z]+/)}`)
+                let seat_letter = seat.match(/^[A-Z]+/)[0]; // converts the array of letters into one string
+                let seat_number = parseInt(seat.match(/\d+/g).join('')); // converts the array of numbers from match to a single integer
+                let positionI = (seat_letter.charCodeAt(0) - 65) * 8 + seat_number; // converts the letter to the index equivalent and adds the seat No.
                 
-            })
+                seats[positionI] = true;
+            });
+            
 
-            //TODO: parse the seat value to create an array then use the values to generate a grid. 
+            // console.log('Occupied seats', occupiedSeats);
+            
             // const res = await {
             //     date: '03/08/13',
             //     id: 1,
@@ -46,8 +59,7 @@ export default class FlightDetails extends React.Component {
             //     seatsOccupied: [true, false, true, false, true, false, false, true, false ]
             // };
 
-            // this.setState(res);
-
+            this.setState({date: date, id: id , origin: origin, destination: destination , seatsOccupied: seats}); //TODO: look into ways of cleaning this up
         } catch (err) {
             console.log('AJAX ERROR:', err);
         }

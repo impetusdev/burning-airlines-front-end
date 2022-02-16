@@ -1,13 +1,12 @@
 .grid-container {
   display: grid;
-  grid-template-columns: 100px 100px 100px; 
+  grid-template-columns: 100px 100px 100px 100px 100px 100px 100px 100px; 
   /* TODO: get the right number of columns / rows for this display */
   align-items: center;
   justify-content: center;
 
   padding: 20px;
   gap: 10px;
-
 }
 
 .button-pass {
