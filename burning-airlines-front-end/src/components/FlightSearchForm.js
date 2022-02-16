@@ -9,8 +9,7 @@ import React from 'react';
 // </Router>
 
 class FlightSearchForm extends React.Component{
-
-
+    
     state = {
         queryText:''
     };
