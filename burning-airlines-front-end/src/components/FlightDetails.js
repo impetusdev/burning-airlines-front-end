@@ -3,7 +3,7 @@ import React from "react";
 import '../FlightDetails.css'
 
 
-const RAILS_SECRETS_BASE_URL = 'http://localhost:3000/flights/41';
+const RAILS_SECRETS_BASE_URL = 'http://localhost:3000/flights/41'; //FIXME: this is a sample number
 const RAILS_SECRETS_BASE_URL_POST = 'http://localhost:3000/reservations.json';
 
 const rowLength = 8;
@@ -16,7 +16,8 @@ export default class FlightDetails extends React.Component {
         date: '',
         origin: '',
         destination: '',
-        seatsOccupied: []
+        seatsOccupied: [],
+        flight_id: 1 //FIXME: this is and example
     };
     
     componentDidMount(){
@@ -36,21 +37,17 @@ export default class FlightDetails extends React.Component {
             console.log('flight response:', res.data);
 
             const seats = Array(40).fill(false); // occupied? => false; 8 by 5
-
             const {date, id , origin, destination } = res.data;
             const seatsOccupied = res.data.reservations.map( reservation =>  reservation.seat)
-            // TODO: convert the string in seats occupied to a raw index position. 
-            // 'if you put in A5
+            // Convert the string in seats occupied to a raw index position. 
+            // Where seat = A5 --> i = 4
             seatsOccupied.forEach(seat => {
-                // console.log(`Seat: ${seat} has the number: ${seat.match(/\d+/g)}`)
-                // console.log(`Seat: ${seat} has the letter: ${seat.match(/^[A-Z]+/)}`)
                 let seat_letter = seat.match(/^[A-Z]+/)[0]; // converts the array of letters into one string
                 let seat_number = parseInt(seat.match(/\d+/g).join('')); // converts the array of numbers from match to a single integer
                 let positionI = (seat_letter.charCodeAt(0) - 65) * rowLength + seat_number; // converts the letter to the index equivalent and adds the seat No.
                 
                 seats[positionI] = true;
             });
-            
 
             // console.log('Occupied seats', occupiedSeats);
             
@@ -78,7 +75,7 @@ export default class FlightDetails extends React.Component {
         // Perform the post request to the backend page. 
         async postSeatReserved(seat) {
         try {
-            const res = await axios.post(RAILS_SECRETS_BASE_URL_POST, {seat: seat})
+            const res = await axios.post(RAILS_SECRETS_BASE_URL_POST, {seat: seat, flight_id: this.flight_id})
             console.log('reservation create response', res.data);
 
             //TODO: Figure out if I need to use the set state again. But I don't think I do. 
