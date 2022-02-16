@@ -3,8 +3,8 @@ import React from "react";
 import '../FlightDetails.css'
 
 
-const RAILS_SECRETS_BASE_URL = 'http://localhost:3000/flights/41'; //FIXME: this is a sample number
-const RAILS_SECRETS_BASE_URL_POST = 'http://localhost:3000/reservations.json';
+const RAILS_FLIGHT_BASE_URL = 'http://localhost:3000/flights/41'; //FIXME: this is a sample number
+const RAILS_RESERVATION_BASE_URL_POST = 'http://localhost:3000/reservations.json';
 
 const rowLength = 8;
 const colLength = 5;
@@ -12,12 +12,11 @@ const colLength = 5;
 export default class FlightDetails extends React.Component {
 
     state = {
-        id: null,
+        flight_id: null,
         date: '',
         origin: '',
         destination: '',
         seatsOccupied: [],
-        flight_id: 1 //FIXME: this is and example
     };
     
     componentDidMount(){
@@ -33,7 +32,7 @@ export default class FlightDetails extends React.Component {
 
     async fetchFlightSeats() {
         try {
-            const res = await axios.get( RAILS_SECRETS_BASE_URL )
+            const res = await axios.get( RAILS_FLIGHT_BASE_URL )
             console.log('flight response:', res.data);
 
             const seats = Array(40).fill(false); // occupied? => false; 8 by 5
@@ -75,7 +74,7 @@ export default class FlightDetails extends React.Component {
         // Perform the post request to the backend page. 
         async postSeatReserved(seat) {
         try {
-            const res = await axios.post(RAILS_SECRETS_BASE_URL_POST, {seat: seat, flight_id: this.flight_id})
+            const res = await axios.post(RAILS_RESERVATION_BASE_URL_POST, {seat: seat, flight_id: this.flight_id})
             console.log('reservation create response', res.data);
 
             //TODO: Figure out if I need to use the set state again. But I don't think I do. 
@@ -91,15 +90,12 @@ export default class FlightDetails extends React.Component {
             <div className="grid-container">
                 {
                     this.state.seatsOccupied.map( (seatOccupied, i) => {
-                        // console.log(seat);
                         return seatOccupied
                         ?
-                        <button key={i} className="button-fail" onClick={()=>this.selectSeat(i)}>Seat #{i}</button>
+                        <button key={i} className="button-fail">Seat #{i}</button>
                         :
                         <button key={i} className="button-pass" onClick={()=>this.selectSeat(i)}>Seat #{i}</button>
                     })
-                    // TODO: make a method to sets new state and then updates the values to the post
-                    // Pass the onClick event into the methhod above.  
                 }
             </div>
         )
