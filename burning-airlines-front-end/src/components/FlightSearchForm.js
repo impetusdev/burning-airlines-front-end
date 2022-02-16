@@ -16,21 +16,20 @@ const RAILS_FLIGHT_SEARCH_BASE_URL = 'http://localhost:3000/flights.json';
 class FlightSearchForm extends React.Component{
     
     state = {
-        searchFlightOrigin: '',
-        searchFlightDestination:'',
-        allFlights: [],
-        allPlanes:[]
+        searchFlightOrigin: 'Sydney',
+        searchFlightDestination:'Auckland',
+        allFlights: 'QX100'
     };
 
 
     handleInputOrigin = (ev) => {
-        console.log('handleInputOrigin()', ev.target.value);
+        // console.log('handleInputOrigin()', ev.target.value);
         this.setState({searchFlightOrigin: ev.target.value})
         //or this.setState(state=>({...state, searchFlightOrigin: value}))
     }; //handleInputOrigin()
 
     handleInputDestination = (ev) => {
-        console.log('handleInputDestination()', ev.target.value);
+        // console.log('handleInputDestination()', ev.target.value);
         this.setState({searchFlightDestination: ev.target.value})
         //or this.setState(state=>({...state, searchFlightDestination: value}))
 
@@ -40,14 +39,16 @@ class FlightSearchForm extends React.Component{
         let searchFlightOrigin = this.state.toCapitalize().searchFlightOrigin;
         let searchFlightDestination = this.state.toCapitalize().searchFlightDestination;
 
-        return this.state.allFlights.filter(flight => flight.origin === searchFlightOrigin && flight.destination === searchFlightDestination);
+        //custom API request here
+
+        // return this.state.allFlights.filter(flight => flight.origin === searchFlightOrigin && flight.destination === searchFlightDestination); TODO: Filter Search 
 
     }; //find search using partial component of search i.e 'sy' input by user should return sydney
 
-    // handleSubmit = (ev) => {
-    //     ev.preventDefault();
-    //     console.log('handleSubmit()')
-    // }; //handleSubmit()
+    handleSubmit = (ev) => {
+        ev.preventDefault();
+        console.log('handleSubmit()', this.state)
+    }; //handleSubmit()
 
     //This waits for a search Origin parent component
     //
@@ -86,11 +87,11 @@ class FlightSearchForm extends React.Component{
             <div>
                 <h4>Search for a flight:</h4>
                 <form onSubmit={this.handleSubmit}>
-                    <input type="text" placeholder="From"   onChange={this.handleInputOrgin} />
+                    <input type="text" placeholder="From"   onChange={this.handleInputOrigin} />
                     <input type="text" placeholder="To"     onChange={this.handleInputDestination} />
 
                     <button>Find Flight</button>
-
+                    
                 </form>    
             </div>
 

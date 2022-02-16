@@ -33,7 +33,7 @@ export default class FlightDetails extends React.Component {
     async fetchFlightSeats() {
         try {
             const res = await axios.get( RAILS_FLIGHT_BASE_URL )
-            console.log('flight response:', res.data);
+            // console.log('flight response:', res.data);
 
             const seats = Array(40).fill(false); // occupied? => false; 8 by 5
             const {date, id , origin, destination } = res.data;

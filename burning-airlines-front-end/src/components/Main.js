@@ -6,7 +6,7 @@ import '../App.css'
 
 import { Link,  HashRouter as Router, Route } from 'react-router-dom';
 
-
+// 
 export default class Main extends React.Component {
     render() {
         return (
@@ -17,7 +17,9 @@ export default class Main extends React.Component {
                     <Link to="/">Search For Flights</Link> | {}
                     <Link to="/details/:id">Temporary link to Flight Details</Link>
                     
-                    <Route exact path="/" component={ FlightSearchForm} />
+                    <Route path="/flights" component={ FlightSearchForm} /> 
+                    {/* <Route exact path="/flights/:id" component={       } />  */}
+
                     <Route exact path="/details/:id" component={ FlightDetails } />
                     <Route></Route>
                 </Router>
