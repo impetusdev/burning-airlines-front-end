@@ -19,7 +19,7 @@ export default class Main extends React.Component {
                     
                     <Route exact path="/" component={ FlightSearchForm} />
                     <Route exact path="/details/:id" component={ FlightDetails } />
-                    <Route>  </Route>
+                    <Route></Route>
                 </Router>
 
                 Hello this is the Main component
