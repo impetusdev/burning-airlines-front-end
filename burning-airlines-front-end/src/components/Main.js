@@ -1,5 +1,6 @@
 import React from "react";
 import FlightDetails from "./FlightDetails";
+import FlightSearchForm from "./FlightSearchForm";
 import ResultsPage from "./ResultsPage";
 import '../App.css'
 
@@ -16,7 +17,7 @@ export default class Main extends React.Component {
                     <Link to="/">Search For Flights</Link> | {}
                     <Link to="/details/:id">Temporary link to Flight Details</Link>
                     
-                    <Route exact path="/" component={ ResultsPage } />
+                    <Route exact path="/" component={ FlightSearchForm} />
                     <Route exact path="/details/:id" component={ FlightDetails } />
                     <Route>  </Route>
                 </Router>
