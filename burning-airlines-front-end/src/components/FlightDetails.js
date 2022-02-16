@@ -62,27 +62,23 @@ export default class FlightDetails extends React.Component {
     
     selectSeat(i) {
         console.log(i);
-        // convert i to Seat ID. 
+        // convert i to Seat ID e.g where i = 9 --> seat = 'B1'. 
         let newSeats = this.state.seatsOccupied.slice({});
-
         newSeats[i] = !newSeats[i]
 
         this.setState({ seatsOccupied: newSeats });
         
-        
-        // Perform the post request to the page. 
-        // debugger;
-        const seat = `${String.fromCharCode(Math.floor(i / rowLength) + 65)}, ${(i % rowLength + 1).toString()}`;
+        const seat = `${String.fromCharCode(Math.floor(i / rowLength) + 65)}` +  `${(i % rowLength + 1).toString()}`;
         console.log('seat is:', seat);
 
         // makes a new reservation with the current users details.
         this.postSeatReserved(seat);
-        
     }
 
-    async postSeatReserved(seat) {
+        // Perform the post request to the backend page. 
+        async postSeatReserved(seat) {
         try {
-            const res = await axios.post(RAILS_SECRETS_BASE_URL_POST, {seat: 'E5'})
+            const res = await axios.post(RAILS_SECRETS_BASE_URL_POST, {seat: seat})
             console.log('reservation create response', res.data);
 
             //TODO: Figure out if I need to use the set state again. But I don't think I do. 
