@@ -1,4 +1,5 @@
 import React from 'react';
+// import axios from 'axios';
 
 
 //TODO: Put this search form into main page in return function,
@@ -11,14 +12,20 @@ import React from 'react';
 class FlightSearchForm extends React.Component{
     
     state = {
-        queryText:''
+        from: '',
+        to:''
     };
 
 
-    handleInput = (ev) => {
-        console.log('handleInput()', ev.target.value);
-        this.setState({queryText: ev.target.value})
-    }; //handleInput()
+    handleInputFrom = (ev) => {
+        console.log('handleInputFrom()', ev.target.value);
+        this.setState({from: ev.target.value})
+    }; //handleInputFrom()
+
+    handleInputTo = (ev) => {
+        console.log('handleInputTo()', ev.target.value);
+        this.setState({to: ev.target.value})
+    }; //handleInputTo()
 
     handleSubmit = (ev) => {
         ev.preventDefault();
@@ -39,10 +46,12 @@ class FlightSearchForm extends React.Component{
         return(
             
             <div>
-                <h4>Search for a flight: {this.state.queryText}</h4>
+                <h4>Search for a flight:</h4>
                 {/* above console logs queryText */}
                 <form onSubmit={this.handleSubmit}>
-                    <input type="text" onChange={this.handleInput} />
+                    <input type="text" placeholder="From"   onChange={this.handleInputFrom} />
+                    <input type="text" placeholder="To"     onChange={this.handleInputTo} />
+
                     <button>Find Flight</button>
 
                 </form>    
