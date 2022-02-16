@@ -40,9 +40,6 @@ class FlightSearchForm extends React.Component{
     render(){
 
 
-
-
-
         return(
             
             <div>

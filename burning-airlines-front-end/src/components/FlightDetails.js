@@ -3,7 +3,7 @@ import React from "react";
 import '../FlightDetails.css'
 
 
-const RAILS_FLIGHT_BASE_URL = 'http://localhost:3000/flights/41'; //FIXME: this is a sample number
+const RAILS_FLIGHT_BASE_URL = 'http://localhost:3000/flights/45'; //FIXME: this is a sample number
 const RAILS_RESERVATION_BASE_URL_POST = 'http://localhost:3000/reservations.json';
 
 const rowLength = 8;
@@ -36,7 +36,7 @@ export default class FlightDetails extends React.Component {
             console.log('flight response:', res.data);
 
             const seats = Array(40).fill(false); // occupied? => false; 8 by 5
-            const {date, id , origin, destination } = res.data;
+            const {date, origin, destination, id } = res.data;
             const seatsOccupied = res.data.reservations.map( reservation =>  reservation.seat)
             // Convert the string in seats occupied to a raw index position. 
             // Where seat = A5 --> i = 4
@@ -48,9 +48,7 @@ export default class FlightDetails extends React.Component {
                 seats[positionI] = true;
             });
 
-            // console.log('Occupied seats', occupiedSeats);
-            
-            this.setState({date: date, id: id , origin: origin, destination: destination , seatsOccupied: seats}); //TODO: look into ways of cleaning this up
+            this.setState({date: date, origin: origin, destination: destination , seatsOccupied: seats, flight_id: id }); //TODO: look into ways of cleaning this up
         } catch (err) {
             console.log('AJAX ERROR:', err);
         }
@@ -60,11 +58,11 @@ export default class FlightDetails extends React.Component {
         console.log(i);
         // convert i to Seat ID e.g where i = 9 --> seat = 'B1'. 
         let newSeats = this.state.seatsOccupied.slice({});
-        newSeats[i] = !newSeats[i]
+        newSeats[i] = !newSeats[i];
 
         this.setState({ seatsOccupied: newSeats });
         
-        const seat = `${String.fromCharCode(Math.floor(i / rowLength) + 65)}` +  `${(i % rowLength + 1).toString()}`;
+        const seat = `${String.fromCharCode(Math.floor(i / rowLength) + 65)}` +  `${(i % rowLength).toString()}`;
         console.log('seat is:', seat);
 
         // makes a new reservation with the current users details.
@@ -74,7 +72,8 @@ export default class FlightDetails extends React.Component {
         // Perform the post request to the backend page. 
         async postSeatReserved(seat) {
         try {
-            const res = await axios.post(RAILS_RESERVATION_BASE_URL_POST, {seat: seat, flight_id: this.flight_id})
+            console.log('the flight_id that is passed into the post request: ', this.state.flight_id);
+            const res = await axios.post(RAILS_RESERVATION_BASE_URL_POST, {seat: seat, flight_id: this.state.flight_id});
             console.log('reservation create response', res.data);
 
             //TODO: Figure out if I need to use the set state again. But I don't think I do. 

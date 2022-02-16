@@ -10,7 +10,7 @@ export default class Main extends React.Component {
     render() {
         return (
             <div className="App">
-                <h1>Put your Title here</h1>
+                <h1>Airline's that don't burn</h1>
                 
                 <Router>
                     <Link to="/">Search For Flights</Link> | {}
