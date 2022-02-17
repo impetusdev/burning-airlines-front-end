@@ -67,11 +67,10 @@ export default class Main extends React.Component {
     render() {
         return (
             <div className="App">
-                <h1>Airline's that don't burn</h1>
-                
+                <h1>Airline's that don't <span>burn</span></h1>
+                <h2>Hello this is the Main component</h2>
                 <Router>
-                    <Link to="/">Search For Flights</Link> | {}
-                    <Link to="/details/51">Temporary link to Flight Details</Link> |               {}
+                    {/* <Link to="/">Search For Flights</Link> | {} */}
                     {
                         // TODO: if user logged in make a link button to logout,
                         // else if not logged in then make a login/ sign up button. 
@@ -90,6 +89,9 @@ export default class Main extends React.Component {
                         </span>
                     }
 
+                    <Link to="/flights/search">Search For Flights</Link> | {}
+                    <Link to="/details/:id">Temporary link to Flight Details</Link>
+                    
                     <Route path="/flights" component={ FlightSearchForm} /> 
                     {/* <Route exact path="/flights/:id" component={       } />  */}
                     <Route path="/details/:id" component={ FlightDetails } />
