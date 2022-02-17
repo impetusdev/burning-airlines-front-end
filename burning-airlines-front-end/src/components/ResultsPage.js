@@ -19,11 +19,6 @@ export default class ResultsPage extends React.Component {
         
     }
 
-    // TODO: perform axios request and populate the state. 
-    
-    
-    
-    //TODO: using the props 
     render() {
         return (
             <div>

@@ -5,14 +5,17 @@ import '../FlightDetails.css'
 // start looking into how we can make this website live.
 
 
-const RAILS_FLIGHT_BASE_URL = 'http://localhost:3000/flights/45'; //FIXME: this is a sample number
+const RAILS_FLIGHT_BASE_URL = 'http://localhost:3000/flights/'; //FIXME: this is a sample number  
 const RAILS_RESERVATION_BASE_URL_POST = 'http://localhost:3000/reservations.json';
 
 const rowLength = 8;
 const colLength = 5;
 
-export default class FlightDetails extends React.Component {
 
+//TODO: USE THE USER ID IN THIS FUNCTION. 
+
+export default class FlightDetails extends React.Component {
+    
     state = {
         flight_id: null,
         date: '',
@@ -23,19 +26,20 @@ export default class FlightDetails extends React.Component {
     
     // update the seats occupied array for rendering. 
     componentDidMount(){
+        console.log('passed in value is', this.props.match.params.id);
+        
         this.fetchFlightSeats();
     }
-
+    
     // componentDidUpdate(prevProps, prevState){
-    //     if (prevProps.match.params.searchText !== this.props.match.params.searchText) {
-    //         this fetchFlightSeats(); //this is if we input another details page index. 
-    //     }
-    // }
-
-    async fetchFlightSeats() {
+        //     if (prevProps.match.params.searchText !== this.props.match.params.searchText) {
+            //         this fetchFlightSeats(); //this is if we input another details page index. 
+            //     }
+            // }
+            
+            async fetchFlightSeats() {
         try {
-            const res = await axios.get( RAILS_FLIGHT_BASE_URL )
-            console.log('flight response:', res.data);
+            const res = await axios.get( RAILS_FLIGHT_BASE_URL + this.props.match.params.id )
             const {date, origin, destination, id } = res.data;
 
             const seats = Array(40).fill(false);
@@ -73,10 +77,8 @@ export default class FlightDetails extends React.Component {
         // Perform the post request to the backend page. 
         async postSeatReserved(seat) {
         try {
-            const res = await axios.post(RAILS_RESERVATION_BASE_URL_POST, {seat: seat, flight_id: this.state.flight_id});
+            const res = await axios.post(RAILS_RESERVATION_BASE_URL_POST, {seat: seat, flight_id: this.state.flight_id}); //FIXME: put in a USER_ID that verifies it
             console.log('reservation create response', res.data);
-
-            //TODO: Figure out if I need to use the set state again. But I don't think I do. 
 
         } catch(err) {
             console.log('Posting Seat Reserved Error:', err);
