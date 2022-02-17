@@ -71,7 +71,7 @@ export default class Main extends React.Component {
                 
                 <Router>
                     <Link to="/">Search For Flights</Link> | {}
-                    <Link to="/details/9">Temporary link to Flight Details</Link> |               {}
+                    <Link to="/details/51">Temporary link to Flight Details</Link> |               {}
                     {
                         // TODO: if user logged in make a link button to logout,
                         // else if not logged in then make a login/ sign up button. 
