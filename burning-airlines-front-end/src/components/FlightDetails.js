@@ -2,6 +2,8 @@ import axios from "axios";
 import React from "react";
 import '../FlightDetails.css'
 
+// start looking into how we can make this website live.
+
 
 const RAILS_FLIGHT_BASE_URL = 'http://localhost:3000/flights/45'; //FIXME: this is a sample number
 const RAILS_RESERVATION_BASE_URL_POST = 'http://localhost:3000/reservations.json';
@@ -19,8 +21,8 @@ export default class FlightDetails extends React.Component {
         seatsOccupied: [],
     };
     
+    // update the seats occupied array for rendering. 
     componentDidMount(){
-        // TODO: perform axios request and populate the state. 
         this.fetchFlightSeats();
     }
 
@@ -33,11 +35,12 @@ export default class FlightDetails extends React.Component {
     async fetchFlightSeats() {
         try {
             const res = await axios.get( RAILS_FLIGHT_BASE_URL )
-            // console.log('flight response:', res.data);
-
-            const seats = Array(40).fill(false); // occupied? => false; 8 by 5
+            console.log('flight response:', res.data);
             const {date, origin, destination, id } = res.data;
+
+            const seats = Array(40).fill(false);
             const seatsOccupied = res.data.reservations.map( reservation =>  reservation.seat)
+            
             // Convert the string in seats occupied to a raw index position. 
             // Where seat = A5 --> i = 4
             seatsOccupied.forEach(seat => {
@@ -54,8 +57,8 @@ export default class FlightDetails extends React.Component {
         }
     }
     
+    // update local state then attempt to push to backend
     selectSeat(i) {
-        console.log(i);
         // convert i to Seat ID e.g where i = 9 --> seat = 'B1'. 
         let newSeats = this.state.seatsOccupied.slice({});
         newSeats[i] = !newSeats[i];
@@ -63,8 +66,6 @@ export default class FlightDetails extends React.Component {
         this.setState({ seatsOccupied: newSeats });
         
         const seat = `${String.fromCharCode(Math.floor(i / rowLength) + 65)}` +  `${(i % rowLength).toString()}`;
-        console.log('seat is:', seat);
-
         // makes a new reservation with the current users details.
         this.postSeatReserved(seat);
     }
@@ -72,7 +73,6 @@ export default class FlightDetails extends React.Component {
         // Perform the post request to the backend page. 
         async postSeatReserved(seat) {
         try {
-            console.log('the flight_id that is passed into the post request: ', this.state.flight_id);
             const res = await axios.post(RAILS_RESERVATION_BASE_URL_POST, {seat: seat, flight_id: this.state.flight_id});
             console.log('reservation create response', res.data);
 
