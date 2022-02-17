@@ -1,86 +1,65 @@
 import React from 'react';
 import axios from 'axios';
+import { Route, HashRouter as Router, Link } from 'react-router-dom';
+import FlightDetails from './FlightDetails';
 
-const RAILS_FLIGHT_SEARCH_BASE_URL = 'http://localhost:3000/flights.json';
+const RAILS_FLIGHT_SEARCH_BASE_URL = 'http://localhost:3000/flights/search';
 
 
-
-
-//TODO: Put this search form into main page in return function,
-//something to the effect of:
-// <Router>
-//   <Route path="" component={ FlightSearchForm } />
-//   <Route exact path="/search/:searchText" component={ ThumbnailGallery } />
-// </Router>
 
 class FlightSearchForm extends React.Component{
     
     state = {
-        searchFlightOrigin: 'Sydney',
-        searchFlightDestination:'Auckland',
-        allFlights: 'QX100'
+        searchFlightOrigin: '',
+        searchFlightDestination:'',
+        flights: []
     };
 
 
     handleInputOrigin = (ev) => {
         // console.log('handleInputOrigin()', ev.target.value);
         this.setState({searchFlightOrigin: ev.target.value})
-        //or this.setState(state=>({...state, searchFlightOrigin: value}))
     }; //handleInputOrigin()
 
     handleInputDestination = (ev) => {
         // console.log('handleInputDestination()', ev.target.value);
         this.setState({searchFlightDestination: ev.target.value})
-        //or this.setState(state=>({...state, searchFlightDestination: value}))
 
     }; //handleInputDestination()
 
-    handleSearch = () => {
-        let searchFlightOrigin = this.state.toCapitalize().searchFlightOrigin;
-        let searchFlightDestination = this.state.toCapitalize().searchFlightDestination;
-
-        //custom API request here
-
-        // return this.state.allFlights.filter(flight => flight.origin === searchFlightOrigin && flight.destination === searchFlightDestination); TODO: Filter Search 
-
-    }; //find search using partial component of search i.e 'sy' input by user should return sydney
-
     handleSubmit = (ev) => {
         ev.preventDefault();
-        console.log('handleSubmit()', this.state)
+        console.log('handleSubmit()', this.state);
+        // let searchFlightOrigin = this.state.toCapitalize().searchFlightOrigin;
+        // let searchFlightDestination = this.state.toCapitalize().searchFlightDestination;
+        //this.state.flights.filter(flight => flight.origin === searchFlightOrigin && flight.destination === searchFlightDestination); TODO: Filter Search
+        this.fetchFlights()
+        
     }; //handleSubmit()
 
-    //This waits for a search Origin parent component
-    //
-    //redirect to new Router Route Path similar to rails
-    // use this.props.history.push(`/flights/search/${this.state.queryText}`);
 
-    componentDidMount(){
-        this.fetchFlights();
-        // window.setInterval(this.fetchFlights, 2000);
-    }
+    fetchFlights = async (origin, destination) => {
 
-    fetchFlights = async () => {
         try{
-            const res = await axios.get(RAILS_FLIGHT_SEARCH_BASE_URL);
+            const res = await axios.get(RAILS_FLIGHT_SEARCH_BASE_URL + `/${this.state.searchFlightOrigin}` + `/${this.state.searchFlightDestination}`);
             console.log('flights response:', res.data);
-            // this.setState({flights: res.data});
+            // debugger;
+            this.setState({
+                flights: [...this.state.flights, res.data]
+            });
         } catch(err){
             console.log('Error Loading AJAX Flight', err);
             // this.setState({error: err});
         }
     }; //fetchFlights()
-
-
-
+ 
 
     render(){
 
-
-        // if(err){
+        // const {flights} = this.state;
+        // if(this.state.err){
         //     return <p>Error Loading Flights</p>
         // }
-
 
         return(
             
@@ -93,7 +72,44 @@ class FlightSearchForm extends React.Component{
                     <button>Find Flight</button>
                     
                 </form>    
+
+            <h4>Flight Results</h4>
+            <p>
+                Nice choice of Destination! Here's some of the best deals we could find for your search while you have 2 days off - leaving your students to fend for themselves against the evils of coding.
+            </p>
+
+            <div className='flightSearchTable'>
+                <Router>
+                    <table >
+                        <tr>
+                            <th>Origin</th>
+                            <th>Destination</th>
+                            <th>Date</th>
+                            <th>Flight Number</th>
+                        </tr>
+                        
+                    {this.state.flights.map(flight => 
+                    
+                        <tr key={flight.id}>
+
+                            <td>{flight.origin}</td>
+                            <td>{flight.destination}</td>
+                            <td>{flight.date}</td>
+
+                            <Link to={`/details/${flight.id}`}><td>{flight.number}</td></Link>
+                            
+                            <Route exact path={`/details/${flight.id}`} component={FlightDetails}></Route>
+
+                        </tr>
+                    
+                    
+                    
+                    )}
+                    </table> 
+                </Router>
             </div>
+
+        </div>
 
 
 

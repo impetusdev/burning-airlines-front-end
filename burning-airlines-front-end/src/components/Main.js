@@ -14,7 +14,7 @@ export default class Main extends React.Component {
                 <h1>Airline's that don't burn</h1>
                 
                 <Router>
-                    <Link to="/">Search For Flights</Link> | {}
+                    <Link to="/flights/search">Search For Flights</Link> | {}
                     <Link to="/details/:id">Temporary link to Flight Details</Link>
                     
                     <Route path="/flights" component={ FlightSearchForm} /> 
@@ -24,7 +24,6 @@ export default class Main extends React.Component {
                     <Route></Route>
                 </Router>
 
-                Hello this is the Main component
             </div>
         )
     }
