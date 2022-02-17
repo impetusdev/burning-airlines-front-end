@@ -1,1 +1,0 @@
-import React,{PureComponent as Component} from 'react';
